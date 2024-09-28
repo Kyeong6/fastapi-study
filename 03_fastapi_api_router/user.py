@@ -9,15 +9,15 @@ class Item(BaseModel):
     price: float
     tax: float | None = None
 
-@user_router.get("/users/")
+@user_router.get("/")
 async def read_users():
     return [{"username": "ricky",
              "username": "martin"}]
 
-@user_router.get("/users/me")
+@user_router.get("/me")
 async def read_user_me():
     return {"username": "currentuser"}
 
-@user_router.get("/users/{username}")
+@user_router.get("/{username}")
 async def read_user(username: str):
     return {"username": username}
