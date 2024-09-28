@@ -37,13 +37,18 @@ def response_html(item_id: int, item_name: str | None = None):
 async def redirect_only(comment: str | None = None):
     print(f"redirect {comment}")
 
+    # 다른 url로 이동시켜줌
+    # 기본 status code는 307(Temporary Redirect)
     return RedirectResponse(url=f"/resp_html/3?item_name={comment}")
 
-# Redirect(Post -> Get)
+# Redirect(Post -> Get) : 제일 많이 쓰는 방식
+# 로그인(post) 후 메인 페이지(get)로 이동할 경우
 @app.post("/create_redirect")
 def create_item(item_id: int = Form, item_name: str = Form()):
     print(f"item_id: {item_id} item_name:{item_name} has been created")
 
-    # Post에서 Get으로 Method가 전환되는 redirect 시 status code가 302
+    # Post에서 Get으로 Method가 전환되는 redirect 시 status code가 302(Method 변경되었다는 의미)
+    # Post -> Get일 경우 status code default인 307이 아닌 302로 설정해줘야 함
+    # 다른 url로 이동시켜줌
     return RedirectResponse(url=f"/resp_html/{item_id}?item_name={item_name}",
                             status_code=status.HTTP_302_FOUND)
