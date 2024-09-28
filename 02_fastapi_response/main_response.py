@@ -52,3 +52,32 @@ def create_item(item_id: int = Form, item_name: str = Form()):
     # 다른 url로 이동시켜줌
     return RedirectResponse(url=f"/resp_html/{item_id}?item_name={item_name}",
                             status_code=status.HTTP_302_FOUND)
+
+
+class Item(BaseModel):
+    name: str
+    description: str
+    price: float
+    tax: float | None = None
+
+class ItemResp(BaseModel):
+    name: str
+    description: str
+    price_with_tax: float
+
+# response model
+@app.post("/create_item/", response_model=ItemResp,
+          status_code=status.HTTP_201_CREATED)
+async def create_item_rmodel(item: Item):
+    if item.tax:
+        price_with_tax = item.price + item.tax
+    else:
+        price_with_tax = item.price
+
+    # response model을 통해서 답변 타입 타이트하게 설정 가능
+    item_resp = ItemResp(
+        name=item.name,
+        description=item.description,
+        price_with_tax=price_with_tax
+    )
+    return item_resp

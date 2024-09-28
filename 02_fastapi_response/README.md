@@ -22,4 +22,9 @@
 **HTTP Status Code 302 vs 303**  
 - 302는 HTTP 스펙상으로는 명확하게 GET Method로의 전환을 명시하고 있지 않음. 하지만 대부분의 브라우저들이 302에 대해서 GET Method로 전환함
 - 303은 HTTP 스펙상에서 명확하게 Get Method로의 전환을 명시하고 있음
-- 303을 사용하는 것이 스펙에 따른 보다 정확한 적용임
+
+**HTTP Status Code 개요**  
+- 2xx : 성공적으로 요청 수행
+- 3xx : 추가적인 Redirection 요청
+- 4xx : Client의 잘못된 요청 등의 오류
+- 5xx : Server 오류
