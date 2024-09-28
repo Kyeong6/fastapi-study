@@ -19,3 +19,7 @@
 - FileResponse: 파일을 다운로드하는데 주로 사용
 - StreamingResponse: 대용량 파일의 Streaming이나 chat message 등에 사용
   
+**HTTP Status Code 302 vs 303**  
+- 302는 HTTP 스펙상으로는 명확하게 GET Method로의 전환을 명시하고 있지 않음. 하지만 대부분의 브라우저들이 302에 대해서 GET Method로 전환함
+- 303은 HTTP 스펙상에서 명확하게 Get Method로의 전환을 명시하고 있음
+- 303을 사용하는 것이 스펙에 따른 보다 정확한 적용임
