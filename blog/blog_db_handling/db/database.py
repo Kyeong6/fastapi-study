@@ -16,9 +16,26 @@ engine = create_engine(DATABASE_CONN, #echo=True,
                        pool_recycle=300)
 
 def direct_get_conn():
+    conn = None
     try:
         conn = engine.connect()
         return conn
     except SQLAlchemyError as e:
         print(e)
         raise e
+
+@contextmanager    
+def context_get_conn():
+    # 견고하게 하기 위한 conn = None 작성
+    conn = None
+    try:
+        conn = engine.connect()
+        # control 하는쪽에 제어권 줌
+        # return 해버리면 finally로 가서 connection close 됨
+        yield conn
+    except SQLAlchemyError as e:
+        print(e)
+        raise e
+    finally:
+        if conn:
+            conn.close()
