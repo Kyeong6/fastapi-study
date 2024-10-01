@@ -19,3 +19,17 @@
 - 많은 서드파티 솔루션들이 SQLAlchemy 지원
 - connection을 engine으로 만들어서 먼저 engin을 생성
   - conn = engine.connect() 이런 형식
+
+**안정적인 DB 자원 관리를 위한 필수 Client 코드 구성 요소**  
+- Connection 관리
+- SQL 재활용
+- Cursor 정리
+
+**Connection Pool**
+- Database 서버에서 Connection을 생성하는 작업은 DB 자원 소모
+  - 사용자/패스워드 검증
+  - 사용자 권한 확인 및 설정
+  - 세션 메모리 할당
+- 빈번한 OLTP성 작업의 요청마다(초당 수십건) DB Connection을 생성하고 종료하는 작업은 많은 자원을 소모하여 안정적인 DB 운영에 큰 영향을 미칠 수 있음
+- 일정 수의 Connection을 미리 Pool에서 생성하고, 이를 가져다 SQL을 수행 후 Connection을 종료시키지 않고 다시 Pool에 반환하는 기법이 Connection Pooling
+- DB에 작업을 수행하는 건 Connection Pool이 역할을 한다고 생각!(Client 요청을 받는 것)
