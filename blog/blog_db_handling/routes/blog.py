@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request, Depends, status
+from fastapi.exceptions import HTTPException
 from db.database import direct_get_conn, context_get_conn
 from sqlalchemy import text, Connection
 from sqlalchemy.exc import SQLAlchemyError
@@ -39,21 +40,29 @@ async def get_all_blogs(request: Request):
         if conn:
             conn.close()
 
-@router.get("/show{id}")
+@router.get("/show/{id}")
 def get_blog_by_id(request: Request, id: int,
                    conn: Connection = Depends(context_get_conn)): # Depends를 통해서 해당 함수 불러줌
     try:
-        query = f"""
+        query = """
         SELECT id, title, author, content, image_loc, modified_dt from blog
-        where id = {id}
+        where id = :id
         """
         stmt = text(query)
-        result = conn.execute(stmt)
+        # 첫번째 id는 query의 :id, 두번째 id는 path parameter id
+        bind_stmt = stmt.bindparams(id=id)
+        result = conn.execute(bind_stmt)
+        if result.rowcount == 0:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, 
+                                detail=f"해당 id {id}는 존재하지 않습니다.")
         
         row = result.fetchone()
-        BlogData(id=row[0], title=row[1], author=row[2], 
+        blog = BlogData(id=row[0], title=row[1], author=row[2], 
                  content=row[3], image_loc=row[4], modified_dt=row[5])
         result.close()
+
+        return blog
+    
     except SQLAlchemyError as e:
         print(e)
         raise e

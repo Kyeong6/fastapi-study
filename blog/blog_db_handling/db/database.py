@@ -13,7 +13,7 @@ engine = create_engine(DATABASE_CONN, #echo=True,
                        poolclass=QueuePool,
                        #poolclass=NullPool, # Connection Pool 사용하지 않음. 
                        pool_size=10, max_overflow=0,
-                       pool_recycle=300)
+                       pool_recycle=30)
 
 def direct_get_conn():
     conn = None
@@ -24,7 +24,7 @@ def direct_get_conn():
         print(e)
         raise e
 
-@contextmanager    
+# @contextmanager
 def context_get_conn():
     # 견고하게 하기 위한 conn = None 작성
     conn = None
