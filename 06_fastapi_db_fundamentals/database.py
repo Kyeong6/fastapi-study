@@ -11,6 +11,14 @@ from contextlib import contextmanager
 DATABASE_CONN = "mysql+mysqlconnector://root:Root1234!@localhost:3306/blog_db"
 
 # Engine 생성
+"""
+SQLAlchemy Connection Pooling 주요 파라미터
+poolclass : 지정하지 않으면 Connection Pool 사용(QueuePool), NonePool을 지정하면 Connection Pool 사용 x
+pool_size : Pool에서 유지되는 Connection 개수
+max_overflow : pool_size를 넘어서 추가 Connection이 필요할 경우 허용할 개수
+pool_recycle: Connection이 Pool내에서 유지되는 시간(초). 해당 시간이 넘어가면 접속시 새로운 Connection Pool 생성
+기본은 -1이며, 이 경우 계속 Pool내에서 유지
+"""
 engine = create_engine(DATABASE_CONN,
                        # connection pool 생성
                        poolclass=QueuePool,
